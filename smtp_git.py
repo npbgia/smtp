@@ -2,6 +2,7 @@
 #Using Python library smtplib send email by Gmail
 
 import smtplib
+from string import Template
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -14,8 +15,19 @@ def login_gmail(gmail_user,gmail_password ):
          server.login(gmail_user, gmail_password)
          print('Login email %s successfull'%gmail_user)
          return server
-    except:
-         print('Something went wrong...')
+    except Exception as E:
+         print('Something went wrong...', E)
+
+def read_template(filename):
+    """
+    Returns a Template object comprising the contents of the
+    file specified by filename.
+    """
+
+    with open(filename, 'r', encoding='utf-8') as template_file:
+        template_file_content = template_file.read()
+        # print(template_file_content)
+    return Template(template_file_content)
 
 #Send Email
 def send_mail(subject,from_email, to_emails,  bcc_emails, login_email, login_password):
@@ -35,10 +47,16 @@ def send_mail(subject,from_email, to_emails,  bcc_emails, login_email, login_pas
     send_to_list = to_emails + bcc_emails
     # login to my smtp server
     server = login_gmail(login_email,login_password)
-    server.sendmail( from_email, send_to_list, msg_str)
+    server.sendmail(from_email, send_to_list, msg_str)
     server.quit()
 
-gmail_user = 'your_email@gmail.com'
-gmail_password = 'your_email_password'
+gmail_user = 'emailcuatui@gmail.com'
+gmail_password = 'passwordcuatui'
 
-send_mail(subject = 'Test Email Subject',from_email = 'Email From Title',to_emails = ['to_email@gmail.com'] ,bcc_emails=['bcc_email1@gmail.com','bcc_email2@gmail.com'], login_email=gmail_user, login_password=gmail_password)
+#login_gmail(gmail_user,gmail_password)
+send_mail(subject = 'Test Khai giang khoa hoc',
+          from_email = 'Email From Title',
+          to_emails = ['toemail@gmail.com'] ,
+          bcc_emails=['bccemail@gmail.com'],
+          login_email=gmail_user,
+          login_password=gmail_password)
